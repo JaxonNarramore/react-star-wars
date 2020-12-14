@@ -17,7 +17,7 @@ const [starship, setStarship] = useState([])
           console.log(result.data);
           setStarship(result.data.results)
       }).catch(err => {
-          console.log(err);
+          
       }) 
   }
 
@@ -31,6 +31,9 @@ const [starship, setStarship] = useState([])
         <Switch>
           <Route path='/' exact render={() => <Starship starships={starship}/> } />
           <Route path='/starship' exact component={StarshipResults} />
+          <Route path='/starship' render={({location}) => 
+              <Starship location={location}/>
+            }/>
         </Switch>
       </div>
     </BrowserRouter>
