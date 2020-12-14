@@ -1,24 +1,39 @@
-import logo from './logo.svg';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
+
 import './App.css';
 
+import Starship from './components/Starship';
+import StarshipResults from './components/StarshipResults'
+
 function App() {
+const [starship, setStarship] = useState([])
+
+  const grabStarship = () => {
+      let url = 'https://swapi.dev/api/starships/'
+      axios.get(url).then(result => {
+          console.log('hi');
+          console.log(result.data);
+          setStarship(result.data.results)
+      }).catch(err => {
+          console.log(err);
+      }) 
+  }
+
+  useEffect(() => {
+    grabStarship();
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Switch>
+          <Route path='/' exact render={() => <Starship starships={starship}/> } />
+          <Route path='/starship' exact component={StarshipResults} />
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
